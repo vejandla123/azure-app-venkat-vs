@@ -103,6 +103,6 @@ This project is open source and available under the MIT License.
 
 ---
 
-**Last Updated:** June 17, 2026
+**Last Updated:** June 17, 2026    
 
 For more information, visit the [repository](https://github.com/vejandla123/azure-app-venkat-vs)
