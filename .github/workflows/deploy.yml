@@ -1,11 +1,52 @@
 name: Deploy
+
 on:
   push:
     branches: [master]
+
+env:
+  AZURE_WEBAPP_NAME: azure-app-venkat-vs
+  ENVIRONMENT: production
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: master
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: master
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/
+      
       - name: Deploy to Azure
-        run: echo "Deploying to Azure..."
+        run: echo "Deploying ${{ env.AZURE_WEBAPP_NAME }} to ${{ env.ENVIRONMENT }} environment..."
