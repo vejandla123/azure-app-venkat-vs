@@ -38,13 +38,13 @@ jobs:
         run: find . -name "*.js" -type f
       
       - name: Restore .NET dependencies
-        run: dotnet restore
+        run: dotnet restore azure-app-venkat-vs/azure-app-venkat-vs.csproj
       
       - name: Build .NET project
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build azure-app-venkat-vs/azure-app-venkat-vs.csproj --configuration Release --no-restore
 
       - name: Publish .NET project
-        run: dotnet publish -c Release -o publish
+        run: dotnet publish azure-app-venkat-vs/azure-app-venkat-vs.csproj -c Release -o publish
       
       - name: Run .NET tests
         run: dotnet test --configuration Release --no-build --verbosity normal
@@ -69,10 +69,3 @@ jobs:
           path: |
             publish
             dist
-      
-      - name: Deploy to Azure (if applicable)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        run: |
-          echo "Deploy step - Configure with your Azure deployment details"
