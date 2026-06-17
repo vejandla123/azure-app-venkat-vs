@@ -1,6 +1,5 @@
 name: Build
 
-
 on:
   push:
     branches: [master]
@@ -51,7 +50,7 @@ jobs:
         run: dotnet test --configuration Release --no-build --verbosity normal
       
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
       
       - name: Run linting
         run: npm run lint --if-present
