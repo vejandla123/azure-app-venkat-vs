@@ -64,10 +64,8 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            bin/
-            dist/
-            node_modules/
-          retention-days: 7
+            publish
+            dist
       
       - name: Deploy to Azure (if applicable)
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
