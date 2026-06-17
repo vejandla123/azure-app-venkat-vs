@@ -1,13 +1,79 @@
 name: Build
+
 on:
   push:
     branches: [master]
   pull_request:
     branches: [master]
+
+env:
+  DOTNET_VERSION: '6.0.x'
+  NODE_VERSION: '18.x'
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
       - name: Verify HTML files
         run: find . -name "*.html" -type f
+      
+      - name: Verify CSS files
+        run: find . -name "*.css" -type f
+      
+      - name: Verify JavaScript files
+        run: find . -name "*.js" -type f
+      
+      - name: Restore .NET dependencies
+        run: dotnet restore
+      
+      - name: Build .NET project
+        run: dotnet build --configuration Release --no-restore
+      
+      - name: Run .NET tests
+        run: dotnet test --configuration Release --no-build --verbosity normal
+      
+      - name: Install Node dependencies
+        run: npm ci
+      
+      - name: Run linting
+        run: npm run lint --if-present
+      
+      - name: Run JavaScript tests
+        run: npm test --if-present
+      
+      - name: Build application
+        run: npm run build --if-present
+      
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            bin/
+            dist/
+            node_modules/
+          retention-days: 7
+      
+      - name: Deploy to Azure (if applicable)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          echo "Deploy step - Configure with your Azure deployment details"
+          # Add your Azure deployment commands here
+          # Example: dotnet publish -c Release -o ./publish
