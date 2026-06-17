@@ -37,7 +37,6 @@ jobs:
       - name: Verify JavaScript files
         run: find . -name "*.js" -type f
       
-      # IMPORTANT: Build the .csproj directly (you do NOT have a .sln file)
       - name: Restore .NET dependencies
         run: dotnet restore azure-app-venkat-vs/azure-app-venkat-vs.csproj
       
