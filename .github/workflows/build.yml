@@ -8,7 +8,6 @@ on:
 
 env:
   DOTNET_VERSION: '6.0.x'
-  NODE_VERSION: '18.x'
 
 jobs:
   build:
@@ -22,11 +21,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
       
       - name: Verify HTML files
         run: find . -name "*.html" -type f
@@ -49,18 +43,6 @@ jobs:
       - name: Run .NET tests
         run: dotnet test --configuration Release --no-build --verbosity normal
       
-      - name: Install Node dependencies
-        run: npm install
-      
-      - name: Run linting
-        run: npm run lint --if-present
-      
-      - name: Run JavaScript tests
-        run: npm test --if-present
-      
-      - name: Build application
-        run: npm run build --if-present
-      
       - name: Upload build artifacts
         if: success()
         uses: actions/upload-artifact@v4
@@ -68,4 +50,3 @@ jobs:
           name: build-artifacts
           path: |
             publish
-            dist
