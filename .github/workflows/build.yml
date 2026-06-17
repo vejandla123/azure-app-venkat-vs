@@ -42,6 +42,9 @@ jobs:
       
       - name: Build .NET project
         run: dotnet build --configuration Release --no-restore
+
+      - name: Publish .NET project
+        run: dotnet publish -c Release -o publish
       
       - name: Run .NET tests
         run: dotnet test --configuration Release --no-build --verbosity normal
@@ -73,5 +76,3 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           echo "Deploy step - Configure with your Azure deployment details"
-          # Add your Azure deployment commands here
-          # Example: dotnet publish -c Release -o ./publish
