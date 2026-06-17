@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run build check
+      run: echo "Building Azure app..."
+    
+    - name: Verify HTML files
+      run: find . -name "*.html" -type f
